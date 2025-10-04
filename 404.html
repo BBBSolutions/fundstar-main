@@ -7,18 +7,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Not Found</title>
   <!--
-      SPA fallback for GitHub Pages: when a URL is requested directly the Pages server
-      will serve this 404 page. The script below preserves the requested path in
-      sessionStorage and then replaces the location with the app root so the SPA
-      router (HashRouter in this project) will load and read the stored path.
-    -->
+    SPA fallback for GitHub Pages: when a URL is requested directly, the Pages server
+    will serve this 404 page. The script below preserves the requested path in
+    sessionStorage and then replaces the location with the app root so the SPA
+    router (like React Router) will load and read the stored path.
+  -->
   <script>
     (function () {
       try {
         // Save the path the user requested so the SPA can read and restore it.
-        sessionStorage.redirect = location.pathname + location.search + location.hash;
-      } catch (e) { /* ignore */ }
-      // Replace the URL so the server serves the index page (or root) and then
+        const fullPath = location.pathname + location.search + location.hash;
+        sessionStorage.setItem('redirect', fullPath);
+      } catch (e) {
+        // sessionStorage can fail in some private browsing modes.
+        console.error("Could not save redirect path:", e);
+      }
+      // Replace the URL so the server serves the index page (or root), and then
       // the app will read sessionStorage.redirect and restore the location.
       location.replace('/');
     })();
