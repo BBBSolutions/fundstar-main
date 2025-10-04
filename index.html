@@ -29,13 +29,11 @@
   <!-- GitHub Pages SPA Redirect -->
   <script>
     (function () {
-      const { pathname, search, hash } = window.location;
-      const params = new URLSearchParams(search);
-      const path = params.get('p');
-      if (path) {
-        const q = params.get('q') || '';
-        const newPath = `${pathname}${path.replace(/~and~/g, '&')}${q ? `?${q.replace(/~and~/g, '&')}` : ''}${hash}`;
-        window.history.replaceState(null, '', newPath);
+      // Restore the URL path that was saved in sessionStorage by 404.html
+      const redirect = sessionStorage.getItem('redirect');
+      if (redirect) {
+        sessionStorage.removeItem('redirect');
+        history.replaceState(null, '', redirect);
       }
     })();
   </script>
